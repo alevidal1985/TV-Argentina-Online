@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telefácil - Canales en Vivo</title>
+  <style>
+    /* VARIABLES Y ESTILOS GLOBALES */
+    :root {
+      --bg-color: #121214;
+      --card-bg: #1e1e24;
+      --card-hover: #2a2a32;
+      --accent-color: #e50914; /* Rojo estilo Netflix */
+      --accent-hover: #f40612;
+      --text-main: #ffffff;
+      --border-radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* ENCABEZADO Y BUSCADOR */
+    header {
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: var(--accent-color);
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 500px;
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      border: 2px solid #333;
+      background-color: #222;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* GRID DE CANALES */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    /* FICHA DEL CANAL */
+    .channel-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      min-height: 220px;
+    }
+
+    .channel-card:hover, .channel-card:focus {
+      background-color: var(--card-hover);
+      transform: translateY(-5px);
+      border-color: var(--accent-color);
+    }
+
+    /* LOGO/ICONO DE CANAL */
+    .channel-badge {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #2c2c35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 15px;
+      border: 2px solid #444;
+    }
+
+    .channel-name {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .btn-play {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-play:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* MODAL DE REPRODUCCIÓN */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.96);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-header {
+      width: 100%;
+      max-width: 1300px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .modal-title {
+      font-size: 2rem;
+      color: white;
+    }
+
+    .btn-close {
+      background-color: #333;
+      color: white;
+      border: 2px solid #666;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn-close:hover {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    /* ESTRUCTURA CON BARRA LATERAL Y REPRODUCTOR */
+    .player-layout {
+      display: flex;
+      width: 100%;
+      max-width: 1300px;
+      height: 80vh;
+      gap: 15px;
+    }
+
+    /* BARRA LATERAL DE CANALES */
+    .sidebar {
+      width: 280px;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      border: 1px solid #333;
+    }
+
+    .sidebar-title {
+      font-size: 1.1rem;
+      color: #aaa;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #121214;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-item:hover {
+      background-color: var(--card-hover);
+      border-color: #555;
+    }
+
+    .sidebar-item.active {
+      background-color: #2c2c38;
+      border-color: var(--accent-color);
+    }
+
+    .sidebar-badge {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 50%;
+      background-color: #2c2c35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      border: 1px solid #444;
+    }
+
+    .sidebar-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* CONTENEDOR CON RECORTES */
+    .iframe-container {
+      flex: 1;
+      height: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #000;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    iframe {
+      width: 130%;
+      height: 145%;
+      border: none;
+      position: absolute;
+      top: -18%;
+      left: -15%;
+    }
+
+    .error-msg {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #ff6b6b;
+      grid-column: 1 / -1;
+      padding: 40px;
+    }
+
+    @media (max-width: 850px) {
+      .player-layout {
+        flex-direction: column-reverse;
+        height: 85vh;
+      }
+      .sidebar {
+        width: 100%;
+        height: 150px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      .sidebar-item {
+        min-width: 160px;
+      }
+      .iframe-container {
+        height: 100%;
+      }
+      iframe {
+        width: 160%;
+        height: 150%;
+        top: -15%;
+        left: -30%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📺 MIS CANALES</h1>
+    <input type="text" id="searchInput" class="search-box" placeholder="🔎 Buscar canal (ej. TN, C5N...)" onkeyup="filterChannels()">
+  </header>
+
+  <main class="grid-container" id="channelsGrid">
+    <!-- Carga de canales -->
+  </main>
+
+  <!-- MODAL DE REPRODUCCIÓN -->
+  <div class="modal" id="videoModal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalChannelTitle">Nombre del Canal</h2>
+      <button class="btn-close" onclick="closeModal()">⬅ INICIO</button>
+    </div>
+    <div class="player-layout">
+      <!-- BARRA LATERAL CON LA LISTA DE CANALES -->
+      <div class="sidebar" id="sidebarChannels">
+        <!-- Ítems agregados dinámicamente -->
+      </div>
+      <!-- CONTENEDOR DEL REPRODUCTOR -->
+      <div class="iframe-container">
+        <iframe id="videoIframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // LISTA DE CANALES INTEGRADA (Permite doble clic directo)
+let channels = [
+      { name: "TN", url: "https://www.5900.tv/video/todo-noticias-tn-en-vivo", badge: "TN" },
+      { name: "LN+", url: "https://www.5900.tv/video/la-nacion-ln-en-vivo-las-24-horas", badge: "LN+" },
+      { name: "TV Pública", url: "https://www.5900.tv/video/television-publica-argentina", badge: "TVP" },
+      { name: "A24", url: "https://www.5900.tv/video/a24-en-vivo", badge: "A24" },
+      { name: "Crónica", url: "https://www.5900.tv/video/cronica-tv", badge: "CRO" },
+      { name: "C5N", url: "https://www.5900.tv/video/c5n-en-vivo", badge: "C5N" },
+      { name: "Canal 9", url: "https://www.5900.tv/video/canal-9-buenos-aires", badge: "El 9" },
+      { name: "Net TV", url: "https://www.5900.tv/video/net-tv", badge: "Net" },
+      { name: "26", url: "https://www.5900.tv/video/canal-26", badge: "C26" },
+      { name: "TELEFE Córdoba", url: "https://www.5900.tv/video/canal-8-de-cordoba", badge: "TLF" }
+    ];
+
+    let currentChannelName = "";
+
+    const grid = id('channelsGrid');
+    const sidebar = id('sidebarChannels');
+
+    function id(elementId) {
+      return document.getElementById(elementId);
+    }
+
+    async function loadChannelsFromFile() {
+      try {
+        const response = await fetch('canales.txt');
+        if (!response.ok) throw new Error('CORS o archivo no disponible');
+        const text = await response.text();
+        parseChannels(text);
+      } catch (error) {
+        renderChannels(channels);
+      }
+    }
+
+    function parseChannels(text) {
+      const loadedChannels = [];
+      const lines = text.split('\n');
+      
+      lines.forEach(line => {
+        line = line.trim();
+        if (!line) return;
+        if (line.startsWith('-')) line = line.substring(1).trim();
+
+        let parts = [];
+        if (line.includes('|')) {
+          parts = line.split('|');
+        } else if (line.includes(': http')) {
+          const idx = line.indexOf(': http');
+          parts = [line.substring(0, idx), line.substring(idx + 2)];
+        } else if (line.includes('http')) {
+          const idx = line.indexOf('http');
+          parts = [line.substring(0, idx), line.substring(idx)];
+        }
+
+        if (parts.length >= 2) {
+          const name = parts[0].trim();
+          const url = parts.slice(1).join('http').trim().startsWith('http') ? parts.slice(1).join('http').trim() : 'https://' + parts.slice(1).join('http').trim();
+          const badge = name.length <= 4 ? name : name.substring(0, 3).toUpperCase();
+          loadedChannels.push({ name, url, badge });
+        }
+      });
+
+      if (loadedChannels.length > 0) {
+        channels = loadedChannels;
+      }
+      renderChannels(channels);
+    }
+
+    function renderChannels(items) {
+      grid.innerHTML = '';
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="error-msg">No se encontraron canales que coincidan.</div>`;
+        return;
+      }
+
+      items.forEach(channel => {
+        const card = document.createElement('div');
+        card.className = 'channel-card';
+        card.onclick = () => openChannel(channel.name, channel.url);
+        
+        card.innerHTML = `
+          <div class="channel-badge">${channel.badge}</div>
+          <div class="channel-name">${channel.name}</div>
+          <button class="btn-play">▶ VER CANAL</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderSidebar() {
+      sidebar.innerHTML = '<div class="sidebar-title">Canales</div>';
+      channels.forEach(channel => {
+        const item = document.createElement('div');
+        item.className = `sidebar-item ${channel.name === currentChannelName ? 'active' : ''}`;
+        item.onclick = () => openChannel(channel.name, channel.url);
+
+        item.innerHTML = `
+          <div class="sidebar-badge">${channel.badge}</div>
+          <div class="sidebar-name">${channel.name}</div>
+        `;
+        sidebar.appendChild(item);
+      });
+    }
+
+    function openChannel(name, url) {
+      currentChannelName = name;
+      id('modalChannelTitle').innerText = name;
+      id('videoIframe').src = url;
+      renderSidebar();
+      id('videoModal').classList.add('active');
+    }
+
+    function closeModal() {
+      id('videoModal').classList.remove('active');
+      id('videoIframe').src = '';
+    }
+
+    function filterChannels() {
+      const text = id('searchInput').value.toLowerCase();
+      const filtered = channels.filter(c => c.name.toLowerCase().includes(text));
+      renderChannels(filtered);
+    }
+
+    loadChannelsFromFile();
+  </script>
+</body>
+</html>
