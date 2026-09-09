@@ -266,7 +266,7 @@
       text-overflow: ellipsis;
     }
 
-    /* CONTENEDOR DEL REPRODUCTOR CON ZOOM COMPLETO (ANCHO Y ALTO) */
+    /* CONTENEDOR DEL REPRODUCTOR */
     .iframe-container {
       flex: 1;
       height: 100%;
@@ -274,18 +274,12 @@
       overflow: hidden;
       background-color: #000;
       box-shadow: 0 0 30px rgba(0,0,0,0.8);
-      position: relative;
     }
 
     iframe {
-      width: 250%;
-      height: 250%;
+      width: 100%;
+      height: 100%;
       border: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: scale(0.4);
-      transform-origin: 0 0;
     }
 
     .error-msg {
@@ -313,12 +307,6 @@
       }
       .iframe-container {
         height: 100%;
-      }
-      iframe {
-        width: 250%;
-        height: 250%;
-        transform: scale(0.4);
-        transform-origin: 0 0;
       }
     }
   </style>
@@ -353,7 +341,7 @@
   </div>
 
   <script>
-    // LISTA DE CANALES INTEGRADA (Permite doble clic directo)
+    // LISTA DE CANALES INTEGRADA
     let channels = [
       { name: "TN", url: "https://www.5900.tv/video/todo-noticias-tn-en-vivo", badge: "TN" },
       { name: "LN+", url: "https://www.5900.tv/video/la-nacion-ln-en-vivo-las-24-horas", badge: "LN+" },
