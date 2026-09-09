@@ -266,7 +266,7 @@
       text-overflow: ellipsis;
     }
 
-    /* CONTENEDOR CON RECORTES */
+    /* CONTENEDOR DEL REPRODUCTOR CON ESCALA Y ZOOM COMPLETO */
     .iframe-container {
       flex: 1;
       height: 100%;
@@ -278,12 +278,14 @@
     }
 
     iframe {
-      width: 130%;
-      height: 145%;
+      width: 154%;
+      height: 154%;
       border: none;
       position: absolute;
-      top: -18%;
-      left: -15%;
+      top: 0;
+      left: 0;
+      transform: scale(0.65);
+      transform-origin: 0 0;
     }
 
     .error-msg {
@@ -313,10 +315,10 @@
         height: 100%;
       }
       iframe {
-        width: 160%;
-        height: 150%;
-        top: -15%;
-        left: -30%;
+        width: 154%;
+        height: 154%;
+        transform: scale(0.65);
+        transform-origin: 0 0;
       }
     }
   </style>
@@ -352,17 +354,13 @@
 
   <script>
     // LISTA DE CANALES INTEGRADA (Permite doble clic directo)
-let channels = [
+    let channels = [
       { name: "TN", url: "https://www.5900.tv/video/todo-noticias-tn-en-vivo", badge: "TN" },
       { name: "LN+", url: "https://www.5900.tv/video/la-nacion-ln-en-vivo-las-24-horas", badge: "LN+" },
       { name: "TV Pública", url: "https://www.5900.tv/video/television-publica-argentina", badge: "TVP" },
       { name: "A24", url: "https://www.5900.tv/video/a24-en-vivo", badge: "A24" },
       { name: "Crónica", url: "https://www.5900.tv/video/cronica-tv", badge: "CRO" },
-      { name: "C5N", url: "https://www.5900.tv/video/c5n-en-vivo", badge: "C5N" },
-      { name: "Canal 9", url: "https://www.5900.tv/video/canal-9-buenos-aires", badge: "El 9" },
-      { name: "Net TV", url: "https://www.5900.tv/video/net-tv", badge: "Net" },
-      { name: "26", url: "https://www.5900.tv/video/canal-26", badge: "C26" },
-      { name: "TELEFE Córdoba", url: "https://www.5900.tv/video/canal-8-de-cordoba", badge: "TLF" }
+      { name: "C5N", url: "https://www.5900.tv/video/c5n-en-vivo", badge: "C5N" }
     ];
 
     let currentChannelName = "";
