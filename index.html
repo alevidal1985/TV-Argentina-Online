@@ -266,7 +266,7 @@
       text-overflow: ellipsis;
     }
 
-    /* CONTENEDOR DEL REPRODUCTOR CON ESCALA Y ZOOM COMPLETO */
+    /* CONTENEDOR DEL REPRODUCTOR CON ZOOM COMPLETO (ANCHO Y ALTO) */
     .iframe-container {
       flex: 1;
       height: 100%;
@@ -278,13 +278,13 @@
     }
 
     iframe {
-      width: 154%;
-      height: 154%;
+      width: 250%;
+      height: 250%;
       border: none;
       position: absolute;
       top: 0;
       left: 0;
-      transform: scale(0.65);
+      transform: scale(0.4);
       transform-origin: 0 0;
     }
 
@@ -315,9 +315,9 @@
         height: 100%;
       }
       iframe {
-        width: 154%;
-        height: 154%;
-        transform: scale(0.65);
+        width: 250%;
+        height: 250%;
+        transform: scale(0.4);
         transform-origin: 0 0;
       }
     }
