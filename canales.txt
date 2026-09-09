@@ -1,5 +1,7 @@
 - TV Pública: https://www.5900.tv/video/television-publica-argentina
-- TELEFE: https://www.5900.tv/video/television-publica-argentina
+- TELEFE: https://www.mitelefe.com/telefe-en-vivo
+- El Trece: https://www.eltrecetv.com.ar/vivo/
+- América: https://www.americatv.com.ar/vivo
 - TN: https://www.5900.tv/video/todo-noticias-tn-en-vivo
 - LN+: https://www.5900.tv/video/la-nacion-ln-en-vivo-las-24-horas
 - A24: https://www.5900.tv/video/a24-en-vivo
